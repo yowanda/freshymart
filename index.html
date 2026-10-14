@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PasarSegar — From Farm to Your Door in 24 Hours</title>
+<style>
+:root{
+  --cream:#FFF8EE; --cream2:#FDEEDD; --green:#1E5631; --green2:#2E7D4F;
+  --green-soft:#E4F2E7; --ink:#22301F; --muted:#6B7A68; --accent:#E4572E;
+  --accent2:#F4A259; --card:#FFFFFF; --line:#EADDCB; --gold:#C98A1B;
+  --radius:18px; --shadow:0 10px 30px rgba(30,86,49,.10);
+  --shadow2:0 4px 14px rgba(30,86,49,.08);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;line-height:1.5}
+h1,h2,h3,.serif{font-family:Georgia,"Times New Roman",serif;font-weight:700;line-height:1.15}
+a{color:var(--green)}
+button{font:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--accent2);outline-offset:2px}
+.container{max-width:1180px;margin:0 auto;padding:0 20px}
+.skip{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+.skip:focus{position:static;width:auto;height:auto;overflow:visible;clip:auto;white-space:normal;background:var(--green);color:#fff;padding:8px 14px}
+
+/* Header */
+header{position:sticky;top:0;z-index:40;background:rgba(255,248,238,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;gap:18px;padding:12px 0}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--green);font-size:22px}
+.logo svg{flex:0 0 auto}
+.logo small{display:block;font-family:"Segoe UI",sans-serif;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.nav-links{display:flex;gap:6px;margin-left:10px}
+.nav-links a{text-decoration:none;color:var(--ink);padding:8px 12px;border-radius:999px;font-weight:600;font-size:14px}
+.nav-links a:hover,.nav-links a.active{background:var(--green-soft);color:var(--green)}
+.nav-right{margin-left:auto;display:flex;gap:10px;align-items:center}
+.search-mini{display:none}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:999px;padding:11px 20px;font-weight:700;font-size:14px;transition:transform .12s ease,box-shadow .12s ease}
+.btn:active{transform:scale(.97)}
+.btn-green{background:var(--green);color:#fff;box-shadow:var(--shadow2)}
+.btn-green:hover{background:#17452A}
+.btn-accent{background:var(--accent);color:#fff}
+.btn-accent:hover{background:#C9451F}
+.btn-ghost{background:#fff;color:var(--green);border:1.5px solid var(--green)}
+.btn-light{background:var(--green-soft);color:var(--green)}
+.cart-btn{position:relative;background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:9px 16px;font-weight:700;display:inline-flex;gap:8px;align-items:center}
+.cart-badge{position:absolute;top:-8px;right:0;background:var(--accent);color:#fff;font-size:11px;min-width:20px;height:20px;border-radius:999px;display:flex;align-items:center;justify-content:center;padding:0 5px}
+.cart-badge.bounce{animation:bounce .45s ease}
+@keyframes bounce{0%{transform:scale(1)}40%{transform:scale(1.45)}100%{transform:scale(1)}}
+@keyframes pulse-dot{0%,100%{box-shadow:0 0 0 0 rgba(228,87,46,.45)}50%{box-shadow:0 0 0 6px rgba(228,87,46,0)}}
+
+/* Hero */
+.hero{padding:44px 0 10px}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:34px;align-items:center}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:700;color:var(--green)}
+.eyebrow .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:pulse-dot 1.8s infinite}
+.hero h1{font-size:56px;margin:18px 0 12px;letter-spacing:-.01em}
+.hero h1 em{color:var(--accent);font-style:italic}
+.hero p.lead{font-size:18px;color:var(--muted);max-width:520px;margin:0 0 22px}
+.hero-search{display:flex;gap:8px;background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:6px 6px 6px 18px;max-width:560px;box-shadow:var(--shadow2)}
+.hero-search input{flex:1;border:0;outline:none;font-size:15px;background:transparent;min-width:0}
+.hero-search input::placeholder{color:#9AA79A}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-size:13.5px;font-weight:600;cursor:pointer}
+.chip:hover{border-color:var(--green)}
+.chip.on{background:var(--green);color:#fff;border-color:var(--green)}
+.hero-stats{display:flex;gap:26px;margin-top:22px}
+.hero-stats b{display:block;font-family:Georgia,serif;font-size:22px;color:var(--green)}
+.hero-stats span{font-size:12.5px;color:var(--muted)}
+.hero-visual{position:relative}
+.hero-card{background:#fff;border-radius:26px;box-shadow:var(--shadow);overflow:hidden;border:1px solid var(--line)}
+.hero-card .hv{height:250px;display:flex;align-items:flex-end;justify-content:center;background:linear-gradient(140deg,#FDE7C8,#CDEED6 55%,#A8DDB4)}
+.hero-card .hv svg{width:220px;height:220px}
+.hero-card-body{padding:18px 20px}
+.hero-card-body .row{display:flex;justify-content:space-between;align-items:center}
+.price{font-family:Georgia,serif;font-size:22px;color:var(--green)}
+.price small{font-size:13px;color:var(--muted);font-family:"Segoe UI",sans-serif}
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;border-radius:999px;padding:4px 9px}
+.badge-fresh{background:#FFE8DE;color:#B03A17}
+.badge-fresh .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse-dot 1.8s infinite}
+.badge-organic{background:var(--green-soft);color:var(--green)}
+.badge-new{background:#FFF3C4;color:#7A5A00}
+.float-card{position:absolute;left:-14px;bottom:26px;background:#fff;border-radius:14px;box-shadow:var(--shadow);padding:10px 14px;display:flex;gap:10px;align-items:center;font-size:13px;border:1px solid var(--line)}
+.float-card b{color:var(--green)}
+.float-card2{position:absolute;right:-8px;top:22px;background:var(--green);color:#fff;border-radius:14px;box-shadow:var(--shadow);padding:10px 14px;font-size:13px}
+.float-card2 b{font-size:17px}
+
+/* Sections */
+.section{padding:38px 0 8px}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:18px}
+.section-head h2{font-size:32px;margin:0}
+.section-head p{color:var(--muted);margin:6px 0 0;max-width:560px}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px}
+.toolbar label{font-size:13px;font-weight:600;color:var(--muted)}
+.toolbar select{border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;background:#fff;font:inherit;font-size:14px}
+.result-count{font-size:13.5px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow2);cursor:pointer;transition:transform .15s ease,box-shadow .15s ease;text-align:left;width:100%;padding:0;font:inherit;color:inherit}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.card .visual{height:150px;display:flex;align-items:center;justify-content:center;position:relative}
+.card .visual svg{width:110px;height:110px}
+.card .badges{position:absolute;top:10px;left:10px;display:flex;gap:6px;flex-wrap:wrap}
+.card-body{padding:14px 16px 16px}
+.card-body h3{font-size:18px;margin:0 0 4px}
+.farmer{font-size:13px;color:var(--muted);display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.farmer .stars{color:var(--gold);letter-spacing:.06em}
+.meta{display:flex;gap:12px;font-size:12.5px;color:var(--muted);margin:8px 0 10px;flex-wrap:wrap}
+.price-row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.add-btn{background:var(--green);color:#fff;border:0;border-radius:999px;padding:8px 16px;font-weight:700;font-size:13px}
+.add-btn:hover{background:#17452A}
+.empty{grid-column:1/-1;text-align:center;padding:50px 20px;background:#fff;border:1px dashed var(--line);border-radius:var(--radius)}
+.empty svg{width:120px;height:120px}
+
+/* Farmer stories */
+.farmers{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.farmer-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow2)}
+.farmer-card .ava{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.farmer-card blockquote{font-family:Georgia,serif;font-size:18px;margin:0 0 12px;line-height:1.4}
+.farmer-card .who b{display:block}
+.farmer-card .who span{font-size:13px;color:var(--muted)}
+.farmer-card .since{margin-top:12px;font-size:12.5px;font-weight:700;color:var(--green);background:var(--green-soft);display:inline-block;padding:4px 10px;border-radius:999px}
+
+/* How it works */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.step{background:var(--green);color:#EAF5EC;border-radius:var(--radius);padding:24px;position:relative;overflow:hidden}
+.step:nth-child(2){background:#2E7D4F}
+.step:nth-child(3){background:#E4572E}
+.step .num{font-family:Georgia,serif;font-size:44px;opacity:.85}
+.step h3{color:#fff;margin:8px 0 6px;font-size:21px}
+.step p{margin:0;font-size:14.5px;opacity:.92}
+
+/* Drawer + modal */
+.overlay{position:fixed;inset:0;background:rgba(20,35,20,.45);z-index:60;opacity:0;pointer-events:none;transition:opacity .2s}
+.overlay.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;height:100dvh;width:min(420px,94vw);background:#fff;z-index:70;transform:translateX(105%);transition:transform .25s ease;box-shadow:-20px 0 40px rgba(0,0,0,.15);display:flex;flex-direction:column}
+.drawer.open{transform:none}
+.drawer-head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.drawer-head h2{margin:0;font-size:22px}
+.icon-btn{border:1.5px solid var(--line);background:#fff;border-radius:50%;width:36px;height:36px;font-size:16px;line-height:1}
+.drawer-body{flex:1;overflow:auto;padding:16px 20px}
+.cart-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);align-items:center}
+.cart-item .thumb{width:56px;height:56px;border-radius:12px;flex:0 0 auto;display:flex;align-items:center;justify-content:center}
+.cart-item .thumb svg{width:38px;height:38px}
+.cart-item .info{flex:1;min-width:0}
+.cart-item .info b{display:block;font-size:14.5px}
+.cart-item .info span{font-size:12.5px;color:var(--muted)}
+.qty{display:inline-flex;align-items:center;gap:2px;border:1.5px solid var(--line);border-radius:999px;margin-top:6px}
+.qty button{border:0;background:transparent;width:28px;height:28px;font-size:16px;font-weight:700}
+.qty span{min-width:22px;text-align:center;font-weight:700;font-size:14px}
+.drawer-foot{padding:16px 20px 20px;border-top:1px solid var(--line);background:#FFFDF8}
+.freebar{height:8px;background:#EEE;border-radius:999px;overflow:hidden;margin:8px 0 14px}
+.freebar i{display:block;height:100%;background:var(--green);border-radius:999px;transition:width .3s}
+.totals{font-size:14px}
+.totals .row{display:flex;justify-content:space-between;padding:3px 0}
+.totals .row.total{font-weight:800;font-size:16px;border-top:1px dashed var(--line);margin-top:6px;padding-top:10px}
+.modal-wrap{position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;padding:16px}
+.modal-wrap.open{display:flex}
+.modal{background:#fff;border-radius:24px;max-width:760px;width:100%;max-height:92dvh;overflow:auto;box-shadow:0 30px 60px rgba(0,0,0,.25);position:relative}
+.modal-close{position:absolute;top:14px;right:14px;z-index:2}
+.modal-visual{height:230px;display:flex;align-items:center;justify-content:center;position:relative}
+.modal-visual svg{width:180px;height:180px}
+.modal-body{padding:22px 26px 26px}
+.modal-body h2{font-size:30px;margin:0 0 6px}
+.pill-row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.story{background:var(--cream);border-radius:14px;padding:14px 16px;display:flex;gap:12px;align-items:center;margin:14px 0}
+.story .ava{width:48px;height:48px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:22px}
+.story small{color:var(--muted);display:block}
+.buy-row{display:flex;gap:12px;align-items:center;margin-top:16px;flex-wrap:wrap}
+.buy-row .qty{margin:0}
+.buy-row .price{font-size:26px}
+
+/* Checkout */
+.co-steps{display:flex;gap:8px;margin:0 0 20px}
+.co-steps div{flex:1;text-align:center;font-size:13px;font-weight:700;padding:8px;border-radius:999px;background:#F1EAD9;color:var(--muted)}
+.co-steps div.on{background:var(--green);color:#fff}
+.field{margin-bottom:14px}
+.field label{display:block;font-weight:700;font-size:13.5px;margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:11px 13px;font:inherit;background:#fff}
+.field input.invalid,.field select.invalid{border-color:#D33}
+.field .err{color:#D33;font-size:12.5px;display:none;margin-top:4px}
+.field .err.show{display:block}
+.pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pay-opt{border:1.5px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;display:flex;gap:10px;align-items:center;font-weight:600}
+.pay-opt.on{border-color:var(--green);background:var(--green-soft)}
+.pay-opt input{accent-color:var(--green);width:18px;height:18px}
+.review-box{background:var(--cream);border-radius:14px;padding:14px 16px;font-size:14px;margin-bottom:16px}
+.review-box .row{display:flex;justify-content:space-between;padding:3px 0}
+.success{text-align:center;padding:10px 0 6px}
+.success .check{width:76px;height:76px;border-radius:50%;background:var(--green-soft);color:var(--green);font-size:40px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.success h2{font-size:28px;margin:0 0 6px}
+.timeline{display:flex;gap:0;margin:22px 0 8px;text-align:left}
+.timeline .t{flex:1;position:relative;padding-top:22px;font-size:12.5px;font-weight:600}
+.timeline .t::before{content:"";position:absolute;top:6px;left:0;width:100%;height:4px;background:#EADDCB;border-radius:999px}
+.timeline .t::after{content:"";position:absolute;top:0;left:0;width:16px;height:16px;border-radius:50%;background:#fff;border:3px solid #CBBFA8}
+.timeline .t.done::before{background:var(--green)}
+.timeline .t.done::after{border-color:var(--green);background:var(--green)}
+.timeline .t span{display:block;color:var(--muted);font-weight:400}
+
+/* Footer */
+footer{margin-top:56px;background:var(--green);color:#DFF0E2;padding:40px 0 28px}
+footer .cols{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:26px}
+footer h3{color:#fff;margin:0 0 10px}
+footer a{color:#DFF0E2;text-decoration:none;display:block;padding:3px 0;font-size:14px}
+footer .small{font-size:12.5px;opacity:.75;margin-top:18px}
+
+@media(max-width:900px){
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .hero-grid{grid-template-columns:1fr}
+  .hero h1{font-size:42px}
+  .farmers,.steps{grid-template-columns:1fr}
+  footer .cols{grid-template-columns:1fr}
+  .nav-links{display:none}
+}
+@media(max-width:480px){
+  .grid{grid-template-columns:1fr 1fr;gap:12px}
+  .card .visual{height:118px}
+  .card .visual svg{width:84px;height:84px}
+  .card-body{padding:11px 12px 13px}
+  .card-body h3{font-size:15.5px}
+  .hero h1{font-size:36px}
+  .hero-search{flex-direction:column;border-radius:16px;padding:10px}
+  .hero-search input{padding:8px 4px}
+  .hero-search .btn{width:100%;justify-content:center}
+  .section-head h2{font-size:26px}
+  .price{font-size:18px}
+  .add-btn{padding:7px 12px}
+  .float-card{left:6px}
+  .float-card2{right:6px}
+  .pay-grid{grid-template-columns:1fr}
+  .modal-body{padding:18px}
+  .buy-row{flex-direction:column;align-items:stretch}
+  .buy-row .btn{width:100%;justify-content:center}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#marketplace">Skip to marketplace</a>
+
+<header>
+  <div class="container nav">
+    <a class="logo" href="#" aria-label="PasarSegar home">
+      <svg width="34" height="34" viewBox="0 0 40 40" role="img" aria-label="PasarSegar logo: vegetable basket"><rect width="40" height="40" rx="11" fill="#1E5631"/><path d="M12 24c2-6 6-9 10-9 1 5-3 9-10 9z" fill="#A8DDB4"/><path d="M24 15c3-3 6-3 8-1-1 3-4 4-8 1z" fill="#F4A259"/><circle cx="20" cy="27" r="4.5" fill="#E4572E"/></svg>
+      <span>PasarSegar<small>From the farm, for you</small></span>
+    </a>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="#marketplace" class="active">Marketplace</a>
+      <a href="#petani">Farmer Stories</a>
+      <a href="#cara">How It Works</a>
+    </nav>
+    <div class="nav-right">
+      <button class="cart-btn" id="cartOpen" aria-label="Open shopping cart">🛒 Cart <span class="cart-badge" id="cartBadge" aria-live="polite">0</span></button>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Harvested today · Delivered tomorrow morning</span>
+        <h1 id="hero-title">From the farm<br>to your door <em>within 24 hours.</em></h1>
+        <p class="lead">Fresh vegetables, fruit, and farm produce straight from local farmers — no middlemen, no days in a warehouse. Farmers get a fair price, you get the freshest pick.</p>
+        <form class="hero-search" id="heroSearch" role="search">
+          <label class="skip" for="q">Search farm produce</label>
+          <input id="q" type="search" placeholder="Search spinach, mango, free-range eggs…" autocomplete="off">
+          <button class="btn btn-green" type="submit">Search fresh →</button>
+        </form>
+        <div class="chips" id="chips" role="group" aria-label="Filter by category"></div>
+        <div class="hero-stats" aria-label="PasarSegar stats">
+          <div><b>128</b><span>Partner farmers</span></div>
+          <div><b>24 hours</b><span>Farm → door</span></div>
+          <div><b>4.9 / 5</b><span>2,314 reviews</span></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-card">
+          <div class="hv" role="img" aria-label="Illustration of a basket of fresh vegetables">
+            <svg viewBox="0 0 220 220" role="img" aria-label="Basket of fresh vegetables"><ellipse cx="110" cy="196" rx="70" ry="10" fill="#00000012"/><path d="M45 120h130l-12 62a12 12 0 0 1-12 10H71a12 12 0 0 1-12-10z" fill="#C97B2D"/><path d="M45 120h130l-3 12H48z" fill="#A5661F"/><circle cx="85" cy="105" r="26" fill="#E4572E"/><path d="M85 79c4-8 12-11 18-9-2 8-8 12-18 9z" fill="#2E7D4F"/><circle cx="140" cy="100" r="22" fill="#F4A259"/><path d="M140 78c2-7 8-10 14-8-1 7-6 10-14 8z" fill="#2E7D4F"/><ellipse cx="110" cy="112" rx="18" ry="12" fill="#7BC950"/><path d="M110 100c0-10 6-16 12-18 0 10-4 16-12 18z" fill="#1E5631"/></svg>
+          </div>
+          <div class="hero-card-body">
+            <div class="row"><span class="badge badge-fresh"><span class="dot"></span>Harvested today</span><span class="badge badge-organic">🌿 Organic</span></div>
+            <div class="row" style="margin-top:10px"><div><b style="font-size:17px">Morning Harvest Box</b><div style="font-size:13px;color:var(--muted)">Spinach, tomatoes, free-range eggs</div></div><div class="price">Rp 48k <small>/ box</small></div></div>
+          </div>
+        </div>
+        <div class="float-card" aria-hidden="true">🚜 <span><b>Pak Budi</b><br>Cipanas Village · 2 km</span></div>
+        <div class="float-card2" aria-hidden="true">⏱ <b>24 hours</b><br>average delivery</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARKETPLACE -->
+  <section class="section" id="marketplace" aria-labelledby="mp-title">
+    <div class="section-head">
+      <div><h2 id="mp-title">Today's fresh marketplace</h2><p>Every product is harvested at most 24 hours before it reaches your door. Click a card for the farmer's story and details.</p></div>
+    </div>
+    <div class="toolbar">
+      <label for="sortSel">Sort by:</label>
+      <select id="sortSel" aria-label="Sort products">
+        <option value="fresh">Freshest first</option>
+        <option value="price-asc">Price: lowest first</option>
+        <option value="price-desc">Price: highest first</option>
+        <option value="rating">Highest rated</option>
+      </select>
+      <span class="result-count" id="resultCount" aria-live="polite"></span>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <!-- FARMER STORIES -->
+  <section class="section" id="petani" aria-labelledby="petani-title">
+    <div class="section-head"><div><h2 id="petani-title">Meet your farmers</h2><p>Behind every basket is a name, a village, and the hands that harvested it.</p></div></div>
+    <div class="farmers" id="farmers"></div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section" id="cara" aria-labelledby="cara-title">
+    <div class="section-head"><div><h2 id="cara-title">How it works</h2><p>Three steps from farm to your table.</p></div></div>
+    <div class="steps">
+      <div class="step"><div class="num">01</div><h3>Order before 6 PM</h3><p>Farmers see your order this evening and prepare tomorrow morning's harvest.</p></div>
+      <div class="step"><div class="num">02</div><h3>Harvested fresh in the morning</h3><p>Harvest starts at 5 AM, packed and on its way with a chilled courier.</p></div>
+      <div class="step"><div class="num">03</div><h3>Arrives at your door</h3><p>Your order arrives before 10 AM — still dewy, ready to cook.</p></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="cols">
+      <div><h3>PasarSegar</h3><p style="font-size:14px;opacity:.85">Connecting local farmers and city buyers since 2024. Fair prices for farmers, real freshness for you.</p></div>
+      <div><h3>Explore</h3><a href="#marketplace">Marketplace</a><a href="#petani">Farmer Stories</a><a href="#cara">How It Works</a></div>
+      <div><h3>Help</h3><a href="#">Delivery policy</a><a href="#">Freshness guarantee</a><a href="#">Contact us</a></div>
+    </div>
+    <p class="small">© 2026 PasarSegar · Built for the HyperBloom October UI/UX &amp; Web Design Hackathon. Product data is demo sample data.</p>
+  </div>
+</footer>
+
+<!-- Cart drawer -->
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer" aria-label="Shopping cart" aria-hidden="true">
+  <div class="drawer-head"><h2>Your cart</h2><button class="icon-btn" id="cartClose" aria-label="Close cart">✕</button></div>
+  <div class="drawer-body" id="cartBody"></div>
+  <div class="drawer-foot" id="cartFoot"></div>
+</aside>
+
+<!-- Product modal -->
+<div class="modal-wrap" id="modalWrap" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal" id="modal"></div>
+</div>
+
+<!-- Checkout modal -->
+<div class="modal-wrap" id="coWrap" role="dialog" aria-modal="true" aria-labelledby="coTitle">
+  <div class="modal" id="coModal"></div>
+</div>
+
+<script>
+const CATS = ["All","Vegetables","Fruit","Eggs & Dairy","Spices","Pantry"];
+const VIS = {
+  leaf:  (c1,c2)=>'<svg viewBox="0 0 120 120" role="img" aria-label="Green vegetables"><ellipse cx="60" cy="104" rx="34" ry="6" fill="#00000010"/><path d="M60 96C40 82 32 58 38 34c22-2 40 12 44 34 2 12-6 24-22 28z" fill="'+c1+'"/><path d="M60 96c-2-22 2-44 12-58" stroke="'+c2+'" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="34" cy="30" r="5" fill="'+c2+'"/></svg>',
+  round: (c1,c2)=>'<svg viewBox="0 0 120 120" role="img" aria-label="Fresh round fruit"><ellipse cx="60" cy="104" rx="34" ry="6" fill="#00000010"/><circle cx="60" cy="66" r="34" fill="'+c1+'"/><path d="M60 32c2-10 8-15 15-14-1 9-6 14-15 14z" fill="'+c2+'"/><ellipse cx="47" cy="56" rx="8" ry="11" fill="#ffffff55" transform="rotate(-20 47 56)"/></svg>',
+  root:  (c1,c2)=>'<svg viewBox="0 0 120 120" role="img" aria-label="Fresh root vegetable"><ellipse cx="60" cy="104" rx="34" ry="6" fill="#00000010"/><path d="M60 30c10 0 18 12 18 28 0 20-8 38-18 48-10-10-18-28-18-48 0-16 8-28 18-28z" fill="'+c1+'"/><path d="M60 30c0-8 4-14 10-16 0 8-3 14-10 16z" fill="'+c2+'"/><path d="M52 84q10 6 20 0" stroke="'+c2+'" stroke-width="3" fill="none" stroke-linecap="round"/></svg>',
+  egg:   (c1,c2)=>'<svg viewBox="0 0 120 120" role="img" aria-label="Fresh eggs"><ellipse cx="60" cy="104" rx="34" ry="6" fill="#00000010"/><ellipse cx="46" cy="66" rx="16" ry="20" fill="'+c1+'"/><ellipse cx="76" cy="62" rx="14" ry="18" fill="'+c2+'"/><ellipse cx="42" cy="58" rx="4" ry="6" fill="#ffffff66"/></svg>',
+  spice: (c1,c2)=>'<svg viewBox="0 0 120 120" role="img" aria-label="Fresh spices"><ellipse cx="60" cy="104" rx="34" ry="6" fill="#00000010"/><circle cx="40" cy="72" r="12" fill="'+c1+'"/><circle cx="62" cy="80" r="10" fill="'+c2+'"/><circle cx="80" cy="66" r="11" fill="'+c1+'"/><circle cx="58" cy="56" r="9" fill="'+c2+'"/><path d="M30 40c6-10 16-14 24-10-4 10-14 14-24 10z" fill="#2E7D4F"/></svg>',
+  jar:   (c1,c2)=>'<svg viewBox="0 0 120 120" role="img" aria-label="Homemade product"><ellipse cx="60" cy="104" rx="34" ry="6" fill="#00000010"/><rect x="40" y="28" width="40" height="12" rx="4" fill="'+c2+'"/><path d="M38 46h44v44a10 10 0 0 1-10 10H48a10 10 0 0 1-10-10z" fill="'+c1+'"/><rect x="48" y="62" width="24" height="16" rx="6" fill="#ffffff88"/></svg>'
+};
+const PRODUCTS = [
+  {id:1, name:"Green Spinach", cat:"Vegetables", farmer:"Pak Budi", village:"Cipanas Village", harvest:"Harvested today", hours:6, price:8000, unit:"bunch", rating:4.9, reviews:214, organic:true, vis:["leaf","#2E7D4F","#1E5631"], desc:"Morning-picked spinach, wide leaves still crisp and fresh. Perfect for clear soup or garlic stir-fry.", nut:"Rich in iron, folate, and vitamin K. Good for everyday energy.", story:"Pak Budi grows his spinach pesticide-free in bamboo beds he has tended himself since 2019."},
+  {id:2, name:"Red Tomatoes", cat:"Vegetables", farmer:"Bu Sari", village:"Lembang Village", harvest:"Harvested today", hours:5, price:12000, unit:"kg", rating:4.8, reviews:186, organic:true, vis:["round","#E4572E","#2E7D4F"], desc:"Full red tomatoes, thick flesh, balanced sweet-sour taste. Picked at perfect ripeness on the vine.", nut:"A source of lycopene and vitamin C. Great for sauces, salads, and juice.", story:"Bu Sari picks her tomatoes one by one every dawn so they never bruise on the road."},
+  {id:3, name:"Harum Manis Mango", cat:"Fruit", farmer:"Pak Joko", village:"Indramayu Village", harvest:"Harvested today", hours:8, price:25000, unit:"kg", rating:4.9, reviews:342, organic:false, vis:["round","#F4A259","#2E7D4F"], desc:"Grade-A harum manis mango, deep orange flesh, sweet and smooth with no fibers.", nut:"High in vitamins A and C, plus natural fiber for digestion.", story:"Pak Joko's mango orchard has fruited for three generations — the oldest tree was planted by his grandfather."},
+  {id:4, name:"Free-range Eggs", cat:"Eggs & Dairy", farmer:"Bu Dewi", village:"Sukabumi Village", harvest:"Harvested today", hours:4, price:32000, unit:"kg (about 16)", rating:5.0, reviews:421, organic:true, vis:["egg","#FDE7C8","#EADDCB"], desc:"Free-range eggs from roaming hens. Deep orange yolks, naturally savory.", nut:"Complete protein, choline for the brain, and vitamin D.", story:"Bu Dewi's hens roam freely in the yard and eat only corn and rice bran."},
+  {id:5, name:"Red Bird's Eye Chili", cat:"Spices", farmer:"Pak Budi", village:"Cipanas Village", harvest:"Harvested yesterday", hours:20, price:38000, unit:"kg", rating:4.7, reviews:98, organic:false, vis:["spice","#D64541","#E4572E"], desc:"Fiery red bird's eye chili, glossy skin, stems still fresh and green.", nut:"Natural capsaicin boosts metabolism and appetite.", story:"This chili grows on the cool slopes of Cipanas — its heat is famous all the way to the city market."},
+  {id:6, name:"Romaine Lettuce", cat:"Vegetables", farmer:"Bu Sari", village:"Lembang Village", harvest:"Harvested today", hours:7, price:15000, unit:"head", rating:4.8, reviews:154, organic:true, vis:["leaf","#7BC950","#2E7D4F"], desc:"Crisp romaine lettuce, upright leaves, never bitter. The star of salads and burgers.", nut:"Low in calories, rich in vitamins A, K, and folate.", story:"Bu Sari's lettuce grows in hydroponic beds fed by Lembang mountain water."},
+  {id:7, name:"Cavendish Bananas", cat:"Fruit", farmer:"Pak Joko", village:"Indramayu Village", harvest:"Harvested today", hours:9, price:18000, unit:"bunch", rating:4.8, reviews:267, organic:false, vis:["round","#FFD93D","#F4A259"], desc:"Tree-ripened Cavendish bananas, softly sweet, smooth skin with no black spots.", nut:"Potassium and quick energy — the best snack before a workout.", story:"Bananas are harvested just as the bunch starts to yellow, so they arrive at your home in perfect condition."},
+  {id:8, name:"Fresh Cow's Milk", cat:"Eggs & Dairy", farmer:"Bu Dewi", village:"Sukabumi Village", harvest:"Harvested today", hours:3, price:22000, unit:"liter", rating:4.9, reviews:198, organic:false, vis:["jar","#FFFFFF","#2E7D4F"], desc:"Lightly pasteurized fresh cow's milk, naturally creamy taste, no added sugar.", nut:"Calcium and protein for strong bones — great for kids and seniors.", story:"The milk is drawn at 4:30 AM from dairy cows Bu Dewi grazes herself."},
+  {id:9, name:"Fresh Turmeric", cat:"Spices", farmer:"Pak Budi", village:"Cipanas Village", harvest:"Harvested yesterday", hours:26, price:16000, unit:"kg", rating:4.7, reviews:76, organic:true, vis:["spice","#E8A317","#C98A1B"], desc:"Fresh turmeric, large rhizomes, deep yellow color, warm herbal aroma.", nut:"Natural anti-inflammatory curcumin, good for immunity.", story:"Turmeric is intercropped under banana trees to keep the soil fertile."},
+  {id:10, name:"Oyster Mushrooms", cat:"Vegetables", farmer:"Bu Sari", village:"Lembang Village", harvest:"Harvested today", hours:5, price:20000, unit:"250g pack", rating:4.9, reviews:143, organic:true, vis:["leaf","#EADDCB","#C9B896"], desc:"Clean white oyster mushrooms, meaty chewy texture. Perfect for stir-fries and crispy bites.", nut:"Plant protein, B vitamins, and low fat.", story:"The mushrooms grow in a cool bamboo hut, harvested twice a day."},
+  {id:11, name:"Homemade Shrimp Paste Chili", cat:"Pantry", farmer:"Bu Dewi", village:"Sukabumi Village", harvest:"Made yesterday", hours:30, price:28000, unit:"200g jar", rating:4.8, reviews:312, organic:false, vis:["jar","#C0392B","#1E5631"], desc:"Bu Dewi's homemade shrimp paste chili: hot, savory, fragrant with grilled shrimp paste. No preservatives.", nut:"Made from fresh chilies, shallots, and select shrimp paste. Keeps 2 weeks in the fridge.", story:"This chili recipe has run three generations in Bu Dewi's family — the secret is wood-fired shrimp paste."},
+  {id:12, name:"Pontianak Siam Oranges", cat:"Fruit", farmer:"Pak Joko", village:"Indramayu Village", harvest:"Harvested today", hours:10, price:21000, unit:"kg", rating:4.8, reviews:176, organic:false, vis:["round","#FFA62B","#2E7D4F"], desc:"Sweet, fresh Siam oranges, thin easy-peel skin, juicy segments.", nut:"High in vitamin C for immunity, plus fiber and antioxidants.", story:"Oranges are picked just as the skin turns orange, so the sweetness is just right."},
+  {id:13, name:"Organic Soy Tempeh", cat:"Pantry", farmer:"Pak Budi", village:"Cipanas Village", harvest:"Made today", hours:12, price:12000, unit:"block", rating:4.9, reviews:289, organic:true, vis:["jar","#F5E6C8","#C98A1B"], desc:"Perfectly fermented organic soy tempeh, dense, fragrant, never sour.", nut:"High plant protein and natural probiotics from fermentation.", story:"The tempeh is made with local soybeans and wrapped in banana leaves, the old way."},
+  {id:14, name:"Red Ginger", cat:"Spices", farmer:"Bu Sari", village:"Lembang Village", harvest:"Harvested yesterday", hours:22, price:24000, unit:"kg", rating:4.7, reviews:89, organic:true, vis:["root","#D9A066","#A5661F"], desc:"Plump red ginger rhizomes, warm heat, sharp aroma — perfect for ginger tea.", nut:"Warms the body, eases nausea, and soothes the throat.", story:"The ginger grows on sloped Lembang beds so water never pools."}
+];
+const FARMERS = [
+  {name:"Pak Budi Santoso", village:"Cipanas Village, West Java", since:2019, color:"#E4F2E7", ava:"👨‍🌾", quote:"Middlemen used to pay me pennies for my harvest. Now I know who eats my vegetables — and they know who grows them.", crops:"Spinach · Chili · Turmeric · Tempeh"},
+  {name:"Bu Sari Wijaya", village:"Lembang Village, West Java", since:2021, color:"#FDEEDD", ava:"👩‍🌾", quote:"I pick tomatoes every dawn. If they still arrive fresh at your door, that is my pride.", crops:"Tomatoes · Lettuce · Mushrooms · Ginger"},
+  {name:"Pak Joko Prasetyo", village:"Indramayu Village, West Java", since:2020, color:"#FFF3C4", ava:"🧑‍🌾", quote:"The oldest mango tree in my orchard was planted by my grandfather. PasarSegar takes its fruit to city tables, not just the local market.", crops:"Mango · Bananas · Oranges"}
+];
+const FREE_SHIP_AT = 75000, SHIP_FEE = 12000;
+
+let activeCat = "All", query = "", sortBy = "fresh";
+let cart = {}; // id -> qty
+let lastFocus = null;
+
+const $ = s => document.querySelector(s);
+const fmt = n => "Rp " + n.toLocaleString("id-ID");
+const stars = r => "★".repeat(Math.round(r)) + "☆".repeat(5 - Math.round(r));
+const prod = id => PRODUCTS.find(p => p.id === id);
+
+function renderChips(){
+  $("#chips").innerHTML = CATS.map(c =>
+    `<button class="chip ${c===activeCat?"on":""}" data-cat="${c}" aria-pressed="${c===activeCat}">${c}</button>`).join("");
+  document.querySelectorAll("#chips .chip").forEach(b => b.addEventListener("click", () => {
+    activeCat = b.dataset.cat; renderChips(); renderGrid();
+  }));
+}
+function filtered(){
+  let list = PRODUCTS.filter(p => (activeCat==="All" || p.cat===activeCat));
+  if (query) { const q = query.toLowerCase(); list = list.filter(p =>
+    (p.name+" "+p.farmer+" "+p.village+" "+p.cat).toLowerCase().includes(q)); }
+  const by = {fresh:(a,b)=>a.hours-b.hours, "price-asc":(a,b)=>a.price-b.price,
+    "price-desc":(a,b)=>b.price-a.price, rating:(a,b)=>b.rating-a.rating};
+  return list.sort(by[sortBy] || by.fresh);
+}
+function cardHTML(p){
+  return `<button class="card" data-id="${p.id}" aria-label="View details for ${p.name} from ${p.farmer}">
+    <span class="visual" style="background:linear-gradient(140deg,#FFF3DC,#E4F2E7)">${VIS[p.vis[0]](p.vis[1],p.vis[2])}
+      <span class="badges">${p.hours<=12?'<span class="badge badge-fresh"><span class="dot"></span>Harvested today</span>':''}${p.organic?'<span class="badge badge-organic">🌿 Organic</span>':''}</span></span>
+    <span class="card-body">
+      <h3>${p.name}</h3>
+      <span class="farmer">${p.farmer} · ${p.village} · <span class="stars" aria-label="Rated ${p.rating} out of 5">${stars(p.rating)}</span> ${p.rating} (${p.reviews})</span>
+      <span class="meta"><span>🕐 ${p.harvest}</span><span>📦 ${p.unit}</span></span>
+      <span class="price-row"><span class="price">${fmt(p.price)} <small>/ ${p.unit}</small></span>
+      <span class="add-btn" role="button" tabindex="0" data-add="${p.id}" aria-label="Add ${p.name} to cart">+ Cart</span></span>
+    </span>
+  </button>`;
+}
+function renderGrid(){
+  const list = filtered();
+  $("#resultCount").textContent = `${list.length} fresh products${query?` for “${query}”`:""} · harvested within the last 24 hours`;
+  $("#grid").innerHTML = list.length ? list.map(cardHTML).join("") :
+    `<div class="empty"><svg viewBox="0 0 120 120" role="img" aria-label="Empty basket"><circle cx="60" cy="60" r="44" fill="#FDEEDD"/><path d="M38 52h44l-6 30a8 8 0 0 1-8 6H52a8 8 0 0 1-8-6z" fill="#EADDCB"/><circle cx="60" cy="38" r="10" fill="#C9B896"/></svg><h3 style="margin:10px 0 4px">No results for “${query || activeCat}”</h3><p style="color:var(--muted);margin:0 0 14px">Try a different keyword, or browse all of today's fresh products.</p><button class="btn btn-green" id="resetFilter">See all products</button></div>`;
+  document.querySelectorAll(".card").forEach(c => c.addEventListener("click", e => {
+    if (e.target.closest("[data-add]")) return;
+    openDetail(+c.dataset.id);
+  }));
+  document.querySelectorAll("[data-add]").forEach(b => {
+    const add = e => { e.stopPropagation(); addToCart(+b.dataset.add, 1); };
+    b.addEventListener("click", add);
+    b.addEventListener("keydown", e => { if (e.key==="Enter"||e.key===" "){ e.preventDefault(); add(e);} });
+  });
+  const rf = $("#resetFilter");
+  if (rf) rf.addEventListener("click", () => { query=""; $("#q").value=""; activeCat="All"; renderChips(); renderGrid(); });
+}
+function renderFarmers(){
+  $("#farmers").innerHTML = FARMERS.map(f => `
+    <article class="farmer-card">
+      <div class="ava" style="background:${f.color};font-size:30px" role="img" aria-label="Photo of ${f.name}">${f.ava}</div>
+      <blockquote>“${f.quote}”</blockquote>
+      <div class="who"><b>${f.name}</b><span>${f.village}</span></div>
+      <div class="since">Partner since ${f.since} · ${f.crops}</div>
+    </article>`).join("");
+}
+
+/* ---- Cart ---- */
+function cartCount(){ return Object.values(cart).reduce((a,b)=>a+b,0); }
+function cartSubtotal(){ return Object.entries(cart).reduce((s,[id,q])=>s+prod(+id).price*q,0); }
+function addToCart(id, qty){
+  cart[id] = (cart[id]||0) + qty;
+  const badge = $("#cartBadge");
+  badge.textContent = cartCount();
+  badge.classList.remove("bounce"); void badge.offsetWidth; badge.classList.add("bounce");
+  renderCart();
+}
+function setQty(id, qty){
+  if (qty <= 0) delete cart[id]; else cart[id] = qty;
+  $("#cartBadge").textContent = cartCount();
+  renderCart();
+}
+function renderCart(){
+  const ids = Object.keys(cart);
+  const body = $("#cartBody"), foot = $("#cartFoot");
+  if (!ids.length){
+    body.innerHTML = `<div style="text-align:center;padding:34px 10px">
+      <svg width="110" height="110" viewBox="0 0 120 120" role="img" aria-label="Empty shopping cart"><circle cx="60" cy="60" r="44" fill="#FDEEDD"/><path d="M38 52h44l-6 30a8 8 0 0 1-8 6H52a8 8 0 0 1-8-6z" fill="#EADDCB"/><circle cx="60" cy="38" r="10" fill="#C9B896"/></svg>
+      <h3 style="margin:12px 0 4px">Your cart is still empty</h3>
+      <p style="color:var(--muted);margin:0 0 14px">This morning's harvest is waiting — start with the freshest.</p>
+      <button class="btn btn-green" id="emptyBrowse">Browse the marketplace</button></div>`;
+    foot.innerHTML = "";
+    const eb = $("#emptyBrowse");
+    if (eb) eb.addEventListener("click", () => { closeCart(); document.getElementById("marketplace").scrollIntoView({behavior:"smooth"}); });
+    return;
+  }
+  body.innerHTML = ids.map(id => { const p = prod(+id), q = cart[id]; return `
+    <div class="cart-item">
+      <span class="thumb" style="background:linear-gradient(140deg,#FFF3DC,#E4F2E7)">${VIS[p.vis[0]](p.vis[1],p.vis[2])}</span>
+      <span class="info"><b>${p.name}</b><span>${p.farmer} · ${fmt(p.price)} / ${p.unit}</span>
+      <span class="qty"><button data-dec="${id}" aria-label="Decrease quantity of ${p.name}">−</button><span>${q}</span><button data-inc="${id}" aria-label="Increase quantity of ${p.name}">+</button></span></span>
+      <b>${fmt(p.price*q)}</b>
+    </div>`; }).join("");
+  body.querySelectorAll("[data-inc]").forEach(b => b.addEventListener("click", () => setQty(+b.dataset.inc, cart[b.dataset.inc]+1)));
+  body.querySelectorAll("[data-dec]").forEach(b => b.addEventListener("click", () => setQty(+b.dataset.dec, cart[b.dataset.dec]-1)));
+  const sub = cartSubtotal(), ship = sub >= FREE_SHIP_AT ? 0 : SHIP_FEE, remain = Math.max(0, FREE_SHIP_AT - sub);
+  const pct = Math.min(100, Math.round(sub / FREE_SHIP_AT * 100));
+  foot.innerHTML = `
+    <p style="margin:0 0 2px;font-size:13.5px">${remain>0?`Add <b>${fmt(remain)}</b> more for <b>free delivery</b>`:`🎉 <b>Free delivery</b> unlocked for this order!`}</p>
+    <div class="freebar" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100" aria-label="Free delivery progress"><i style="width:${pct}%"></i></div>
+    <div class="totals">
+      <div class="row"><span>Subtotal</span><span>${fmt(sub)}</span></div>
+      <div class="row"><span>Delivery</span><span>${ship===0?"FREE":fmt(ship)}</span></div>
+      <div class="row total"><span>Total</span><span>${fmt(sub+ship)}</span></div>
+    </div>
+    <button class="btn btn-accent" id="checkoutBtn" style="width:100%;justify-content:center;margin-top:14px">Continue to checkout →</button>
+    <p style="text-align:center;font-size:12.5px;color:var(--muted);margin:10px 0 0">💚 Freshness guarantee: not fresh? 100% money back.</p>`;
+  $("#checkoutBtn").addEventListener("click", () => { closeCart(); openCheckout(); });
+}
+function openCart(){ lastFocus = document.activeElement; $("#drawer").classList.add("open"); $("#overlay").classList.add("open"); $("#drawer").setAttribute("aria-hidden","false"); $("#cartClose").focus(); }
+function closeCart(){ $("#drawer").classList.remove("open"); $("#overlay").classList.remove("open"); $("#drawer").setAttribute("aria-hidden","true"); if (lastFocus) lastFocus.focus(); }
+$("#cartOpen").addEventListener("click", openCart);
+$("#cartClose").addEventListener("click", closeCart);
+$("#overlay").addEventListener("click", () => { closeCart(); closeModal(); });
+
+/* ---- Product detail ---- */
+function openDetail(id){
+  const p = prod(id);
+  lastFocus = document.activeElement;
+  $("#modal").innerHTML = `
+    <button class="icon-btn modal-close" id="modalClose" aria-label="Close product details">✕</button>
+    <div class="modal-visual" style="background:linear-gradient(140deg,#FFF3DC,#E4F2E7)">${VIS[p.vis[0]](p.vis[1],p.vis[2])}
+      <span class="badges" style="position:absolute;top:16px;left:16px;display:flex;gap:6px">${p.hours<=12?'<span class="badge badge-fresh"><span class="dot"></span>Harvested today</span>':''}${p.organic?'<span class="badge badge-organic">🌿 Organic</span>':''}</span></div>
+    <div class="modal-body">
+      <h2 id="modalTitle">${p.name}</h2>
+      <div class="farmer">${p.farmer} · ${p.village} · <span class="stars" aria-label="Rated ${p.rating} out of 5">${stars(p.rating)}</span> ${p.rating} (${p.reviews} reviews)</div>
+      <div class="pill-row"><span class="badge badge-organic">🕐 ${p.harvest} · ${p.hours} hours ago</span><span class="badge badge-organic">📦 ${p.unit}</span><span class="badge badge-organic">Category: ${p.cat}</span></div>
+      <p style="font-size:15.5px">${p.desc}</p>
+      <p style="background:var(--green-soft);border-radius:12px;padding:12px 14px;font-size:14px"><b>🥗 Benefits:</b> ${p.nut}</p>
+      <div class="story"><span class="ava" style="background:#FDEEDD">👨‍🌾</span><span><b>${p.farmer}'s story</b><small>${p.story}</small></span></div>
+      <div class="buy-row">
+        <span class="qty"><button id="dDec" aria-label="Decrease quantity">−</button><span id="dQty">1</span><button id="dInc" aria-label="Increase quantity">+</button></span>
+        <span class="price">${fmt(p.price)} <small>/ ${p.unit}</small></span>
+        <button class="btn btn-accent" id="dAdd">+ Add to cart</button>
+      </div>
+    </div>`;
+  $("#modalWrap").classList.add("open");
+  let q = 1;
+  const setQ = v => { q = Math.max(1, v); $("#dQty").textContent = q; };
+  $("#dDec").addEventListener("click", () => setQ(q-1));
+  $("#dInc").addEventListener("click", () => setQ(q+1));
+  $("#dAdd").addEventListener("click", () => { addToCart(id, q); closeModal(); openCart(); });
+  $("#modalClose").addEventListener("click", closeModal);
+}
+function closeModal(){ $("#modalWrap").classList.remove("open"); if (lastFocus) lastFocus.focus(); }
+
+/* ---- Checkout ---- */
+let coStep = 1, coData = {}, payMethod = "transfer";
+function openCheckout(){
+  if (!cartCount()){ openCart(); return; }
+  coStep = 1;
+  renderCheckout();
+  $("#coWrap").classList.add("open");
+}
+function closeCheckout(){ $("#coWrap").classList.remove("open"); }
+function fieldErr(input, show){
+  input.classList.toggle("invalid", show);
+  const err = input.closest(".field").querySelector(".err");
+  if (err) err.classList.toggle("show", show);
+  return !show;
+}
+function renderCheckout(){
+  const sub = cartSubtotal(), ship = sub >= FREE_SHIP_AT ? 0 : SHIP_FEE;
+  const steps = ["1 · Address","2 · Payment","3 · Confirm"].map((s,i) =>
+    `<div class="${coStep===i+1?"on":""}">${s}</div>`).join("");
+  let body = "";
+  if (coStep === 1){
+    body = `
+      <h2 id="coTitle">Delivery address</h2>
+      <p style="color:var(--muted);margin-top:0">Your order arrives tomorrow before 10 AM.</p>
+      <div class="field"><label for="coName">Recipient name</label><input id="coName" type="text" placeholder="Full name" value="${coData.name||""}"><span class="err">Recipient name is required.</span></div>
+      <div class="field"><label for="coPhone">Phone / WhatsApp number</label><input id="coPhone" type="tel" placeholder="08xxxxxxxxxx" value="${coData.phone||""}"><span class="err">Phone number is required (at least 9 digits).</span></div>
+      <div class="field"><label for="coAddr">Full address</label><textarea id="coAddr" rows="3" placeholder="Street, house number, landmark, city">${coData.addr||""}</textarea><span class="err">Address is required.</span></div>
+      <div class="field"><label for="coNote">Note for the courier (optional)</label><input id="coNote" type="text" placeholder="Example: leave with security" value="${coData.note||""}"></div>
+      <div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn btn-ghost" id="coCancel">Cancel</button><button class="btn btn-green" id="coNext">Continue to payment →</button></div>`;
+  } else if (coStep === 2){
+    const opts = [["transfer","🏦 Bank Transfer","BCA / Mandiri / BRI — automatic verification"],["cod","💵 Cash on Delivery (COD)","Pay in cash when your order arrives"],["qris","📱 QRIS","Scan the code, confirmed instantly"]];
+    body = `
+      <h2 id="coTitle">Payment method</h2>
+      <p style="color:var(--muted);margin-top:0">Choose the payment method that suits you best.</p>
+      <div class="pay-grid">${opts.map(([v,icon,label]) => `
+        <label class="pay-opt ${payMethod===v?"on":""}"><input type="radio" name="pay" value="${v}" ${payMethod===v?"checked":""}><span>${icon}<small style="display:block;font-weight:400;color:var(--muted)">${label}</small></span></label>`).join("")}</div>
+      <div style="display:flex;gap:10px;justify-content:space-between;margin-top:20px"><button class="btn btn-ghost" id="coBack">← Back</button><button class="btn btn-green" id="coNext">Review order →</button></div>`;
+  } else if (coStep === 3){
+    const items = Object.entries(cart).map(([id,q]) => { const p = prod(+id); return `<div class="row"><span>${p.name} × ${q}</span><span>${fmt(p.price*q)}</span></div>`; }).join("");
+    body = `
+      <h2 id="coTitle">Confirm your order</h2>
+      <p style="color:var(--muted);margin-top:0">Double-check before we pass it on to the farmers.</p>
+      <div class="review-box"><b>${coData.name}</b><br>${coData.addr}<br>${coData.phone}${coData.note?`<br><i>Note: ${coData.note}</i>`:""}<br><br><b>Pay via:</b> ${{transfer:"Bank Transfer",cod:"Cash on Delivery (COD)",qris:"QRIS"}[payMethod]}</div>
+      <div class="review-box">${items}<div class="row"><span>Delivery</span><span>${ship===0?"FREE":fmt(ship)}</span></div><div class="row" style="font-weight:800;font-size:16px;border-top:1px dashed var(--line);padding-top:8px"><span>Total</span><span>${fmt(sub+ship)}</span></div></div>
+      <div style="display:flex;gap:10px;justify-content:space-between"><button class="btn btn-ghost" id="coBack">← Back</button><button class="btn btn-accent" id="coPlace">Place order · ${fmt(sub+ship)}</button></div>`;
+  } else {
+    const orderNo = coData.orderNo, eta = coData.eta;
+    body = `
+      <div class="success">
+        <div class="check" role="img" aria-label="Order placed">✓</div>
+        <h2>Order placed!</h2>
+        <p style="color:var(--muted)">Order number <b style="color:var(--ink)">${orderNo}</b> · Estimated arrival <b style="color:var(--ink)">${eta}</b></p>
+        <p style="font-size:14px">The farmers are starting on your harvest. Track its journey below.</p>
+        <div class="timeline" aria-label="Delivery status">
+          <div class="t done">Ordered<span>Today</span></div>
+          <div class="t">Harvested<span>Tomorrow 5 AM</span></div>
+          <div class="t">Shipped<span>Tomorrow 7 AM</span></div>
+          <div class="t">Arriving<span>Tomorrow before 10 AM</span></div>
+        </div>
+        <p style="font-size:13.5px;color:var(--muted)">Confirmation sent to WhatsApp ${coData.phone}. 100% freshness guarantee applies.</p>
+        <button class="btn btn-green" id="coDone" style="margin-top:14px">Back to marketplace</button>
+      </div>`;
+  }
+  $("#coModal").innerHTML = `
+    <button class="icon-btn modal-close" id="coClose" aria-label="Close checkout">✕</button>
+    <div class="modal-body">
+      ${coStep <= 3 ? `<div class="co-steps">${steps}</div>` : ""}
+      ${body}
+    </div>`;
+  $("#coClose").addEventListener("click", closeCheckout);
+  const cancel = $("#coCancel"); if (cancel) cancel.addEventListener("click", closeCheckout);
+  const back = $("#coBack"); if (back) back.addEventListener("click", () => { coStep--; renderCheckout(); });
+  const next = $("#coNext");
+  if (next) next.addEventListener("click", () => {
+    if (coStep === 1){
+      const name = $("#coName"), phone = $("#coPhone"), addr = $("#coAddr");
+      const okN = fieldErr(name, !name.value.trim());
+      const okP = fieldErr(phone, phone.value.replace(/\D/g,"").length < 9);
+      const okA = fieldErr(addr, !addr.value.trim());
+      if (!(okN && okP && okA)) return;
+      coData = {...coData, name:name.value.trim(), phone:phone.value.trim(), addr:addr.value.trim(), note:$("#coNote").value.trim()};
+    }
+    if (coStep === 2){
+      const sel = document.querySelector('input[name="pay"]:checked');
+      if (sel) payMethod = sel.value;
+    }
+    coStep++; renderCheckout();
+  });
+  document.querySelectorAll('input[name="pay"]').forEach(r => r.addEventListener("change", () => {
+    payMethod = r.value;
+    document.querySelectorAll(".pay-opt").forEach(o => o.classList.toggle("on", o.querySelector("input").checked));
+  }));
+  const place = $("#coPlace");
+  if (place) place.addEventListener("click", () => {
+    coData.orderNo = "PS-" + Math.floor(1000 + Math.random()*9000);
+    coData.eta = "Tomorrow, before 10 AM";
+    coStep = 4; cart = {}; $("#cartBadge").textContent = "0"; renderCart(); renderCheckout();
+  });
+  const done = $("#coDone");
+  if (done) done.addEventListener("click", () => { closeCheckout(); document.getElementById("marketplace").scrollIntoView({behavior:"smooth"}); });
+}
+
+/* ---- Search / sort / keys ---- */
+$("#heroSearch").addEventListener("submit", e => {
+  e.preventDefault();
+  query = $("#q").value.trim();
+  renderGrid();
+  document.getElementById("marketplace").scrollIntoView({behavior:"smooth"});
+});
+$("#q").addEventListener("input", e => { query = e.target.value.trim(); renderGrid(); });
+$("#sortSel").addEventListener("change", e => { sortBy = e.target.value; renderGrid(); });
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape"){ closeCart(); closeModal(); closeCheckout(); }
+});
+document.querySelectorAll(".nav-links a").forEach(a => a.addEventListener("click", () => {
+  document.querySelectorAll(".nav-links a").forEach(x => x.classList.remove("active"));
+  a.classList.add("active");
+}));
+
+renderChips(); renderGrid(); renderFarmers(); renderCart();
+</script>
+</body>
+</html>
