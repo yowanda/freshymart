@@ -410,7 +410,7 @@ function filtered(){
   return list.sort(by[sortBy] || by.fresh);
 }
 function cardHTML(p){
-  return `<button class="card" data-id="${p.id}" aria-label="View details for ${p.name} from ${p.farmer}">
+  return `<div class="card" data-id="${p.id}" role="button" tabindex="0" aria-label="View details for ${p.name} from ${p.farmer}">
     <span class="visual" style="background:linear-gradient(140deg,#FFF3DC,#E4F2E7)">${VIS[p.vis[0]](p.vis[1],p.vis[2])}
       <span class="badges">${p.hours<=12?'<span class="badge badge-fresh"><span class="dot"></span>Harvested today</span>':''}${p.organic?'<span class="badge badge-organic">🌿 Organic</span>':''}</span></span>
     <span class="card-body">
@@ -420,17 +420,25 @@ function cardHTML(p){
       <span class="price-row"><span class="price">${fmt(p.price)} <small>/ ${p.unit}</small></span>
       <span class="add-btn" role="button" tabindex="0" data-add="${p.id}" aria-label="Add ${p.name} to cart">+ Cart</span></span>
     </span>
-  </button>`;
+  </div>`;
 }
 function renderGrid(){
   const list = filtered();
   $("#resultCount").textContent = `${list.length} fresh products${query?` for “${query}”`:""} · harvested within the last 24 hours`;
   $("#grid").innerHTML = list.length ? list.map(cardHTML).join("") :
     `<div class="empty"><svg viewBox="0 0 120 120" role="img" aria-label="Empty basket"><circle cx="60" cy="60" r="44" fill="#FDEEDD"/><path d="M38 52h44l-6 30a8 8 0 0 1-8 6H52a8 8 0 0 1-8-6z" fill="#EADDCB"/><circle cx="60" cy="38" r="10" fill="#C9B896"/></svg><h3 style="margin:10px 0 4px">No results for “${query || activeCat}”</h3><p style="color:var(--muted);margin:0 0 14px">Try a different keyword, or browse all of today's fresh products.</p><button class="btn btn-green" id="resetFilter">See all products</button></div>`;
-  document.querySelectorAll(".card").forEach(c => c.addEventListener("click", e => {
-    if (e.target.closest("[data-add]")) return;
-    openDetail(+c.dataset.id);
-  }));
+  document.querySelectorAll(".card").forEach(c => {
+    c.addEventListener("click", e => {
+      if (e.target.closest("[data-add]")) return;
+      openDetail(+c.dataset.id);
+    });
+    // Cards are divs with role=button (a real <button> cannot contain the
+    // inner + Cart control), so keyboard activation needs an explicit handler.
+    c.addEventListener("keydown", e => {
+      if (e.target.closest("[data-add]")) return;
+      if (e.key === "Enter" || e.key === " "){ e.preventDefault(); openDetail(+c.dataset.id); }
+    });
+  });
   document.querySelectorAll("[data-add]").forEach(b => {
     const add = e => { e.stopPropagation(); addToCart(+b.dataset.add, 1); };
     b.addEventListener("click", add);

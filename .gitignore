@@ -1,0 +1,7 @@
+# Temp / local-only files — never commit these
+*.log
+*.tmp
+*.bak
+.DS_Store
+Thumbs.db
+cover.png
