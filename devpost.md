@@ -1,8 +1,8 @@
-# PasarSegar — Devpost write-up
+# FreshyMart — Devpost write-up
 
 ## Elevator pitch
 
-From farm to your door in 24 hours. PasarSegar is a farm-to-table marketplace
+From farm to your door in 24 hours. FreshyMart is a farm-to-table marketplace
 where city buyers order fresh produce directly from local farmers — with the
 farmer's name, village, and harvest date on every product.
 
@@ -11,7 +11,7 @@ farmer's name, village, and harvest date on every product.
 City grocery apps sell you a tomato. They never tell you who grew it, when it
 was picked, or whether the farmer got a fair price. Meanwhile small farmers
 struggle to reach buyers without middlemen taking most of the margin.
-PasarSegar closes that gap with a marketplace that treats the farmer as the
+FreshyMart closes that gap with a marketplace that treats the farmer as the
 hero of the product page, not a footnote.
 
 ## What it does
@@ -51,7 +51,7 @@ Good marketplace UX is about trust: who grew it, when it was picked, and what
 happens after you pay. Get those three answers right and the rest of the flow
 feels effortless.
 
-## What's next for PasarSegar
+## What's next for FreshyMart
 
 Real farmer onboarding, harvest subscriptions (weekly vegetable boxes), and
 delivery tracking with live courier location.

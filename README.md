@@ -1,4 +1,4 @@
-# PasarSegar — From farm to your door in 24 hours
+# FreshyMart — From farm to your door in 24 hours
 
 A farm-to-table marketplace web app where city buyers order fresh produce
 directly from local farmers. Designed and built for the HyperBloom October
@@ -33,4 +33,4 @@ no external assets — all visuals are inline SVG + CSS.
 
 ## Live demo
 
-https://yowanda.github.io/pasarsegar/
+https://yowanda.github.io/freshymart/
