@@ -393,6 +393,8 @@ const $ = s => document.querySelector(s);
 const fmt = n => "Rp " + n.toLocaleString("id-ID");
 const stars = r => "★".repeat(Math.round(r)) + "☆".repeat(5 - Math.round(r));
 const prod = id => PRODUCTS.find(p => p.id === id);
+// Escape user-controlled strings before interpolating into innerHTML.
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 function renderChips(){
   $("#chips").innerHTML = CATS.map(c =>
@@ -426,7 +428,7 @@ function renderGrid(){
   const list = filtered();
   $("#resultCount").textContent = `${list.length} fresh products${query?` for “${query}”`:""} · harvested within the last 24 hours`;
   $("#grid").innerHTML = list.length ? list.map(cardHTML).join("") :
-    `<div class="empty"><svg viewBox="0 0 120 120" role="img" aria-label="Empty basket"><circle cx="60" cy="60" r="44" fill="#FDEEDD"/><path d="M38 52h44l-6 30a8 8 0 0 1-8 6H52a8 8 0 0 1-8-6z" fill="#EADDCB"/><circle cx="60" cy="38" r="10" fill="#C9B896"/></svg><h3 style="margin:10px 0 4px">No results for “${query || activeCat}”</h3><p style="color:var(--muted);margin:0 0 14px">Try a different keyword, or browse all of today's fresh products.</p><button class="btn btn-green" id="resetFilter">See all products</button></div>`;
+    `<div class="empty"><svg viewBox="0 0 120 120" role="img" aria-label="Empty basket"><circle cx="60" cy="60" r="44" fill="#FDEEDD"/><path d="M38 52h44l-6 30a8 8 0 0 1-8 6H52a8 8 0 0 1-8-6z" fill="#EADDCB"/><circle cx="60" cy="38" r="10" fill="#C9B896"/></svg><h3 style="margin:10px 0 4px">No results for “${esc(query || activeCat)}”</h3><p style="color:var(--muted);margin:0 0 14px">Try a different keyword, or browse all of today's fresh products.</p><button class="btn btn-green" id="resetFilter">See all products</button></div>`;
   document.querySelectorAll(".card").forEach(c => {
     c.addEventListener("click", e => {
       if (e.target.closest("[data-add]")) return;
@@ -539,12 +541,28 @@ function openDetail(id){
   $("#modalWrap").classList.add("open");
   let q = 1;
   const setQ = v => { q = Math.max(1, v); $("#dQty").textContent = q; };
+  $("#modalClose").focus();
   $("#dDec").addEventListener("click", () => setQ(q-1));
   $("#dInc").addEventListener("click", () => setQ(q+1));
   $("#dAdd").addEventListener("click", () => { addToCart(id, q); closeModal(); openCart(); });
   $("#modalClose").addEventListener("click", closeModal);
 }
 function closeModal(){ $("#modalWrap").classList.remove("open"); if (lastFocus) lastFocus.focus(); }
+// Keep Tab inside an open dialog; clicking the dimmed wrap (outside the
+// dialog box) closes it. Applied to product modal + checkout modal.
+function trapFocus(wrap, onBackdrop){
+  wrap.addEventListener("keydown", e => {
+    if (e.key !== "Tab") return;
+    const els = [...wrap.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')]
+      .filter(el => !el.disabled && el.offsetParent !== null);
+    if (!els.length) return;
+    const first = els[0], last = els[els.length - 1];
+    if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+  });
+  wrap.addEventListener("click", e => { if (e.target === wrap) onBackdrop(); });
+}
+trapFocus($("#modalWrap"), closeModal);
 
 /* ---- Checkout ---- */
 let coStep = 1, coData = {}, payMethod = "transfer";
@@ -553,8 +571,10 @@ function openCheckout(){
   coStep = 1;
   renderCheckout();
   $("#coWrap").classList.add("open");
+  const first = $("#coName"); if (first) first.focus();
 }
 function closeCheckout(){ $("#coWrap").classList.remove("open"); }
+trapFocus($("#coWrap"), closeCheckout);
 function fieldErr(input, show){
   input.classList.toggle("invalid", show);
   const err = input.closest(".field").querySelector(".err");
@@ -570,10 +590,10 @@ function renderCheckout(){
     body = `
       <h2 id="coTitle">Delivery address</h2>
       <p style="color:var(--muted);margin-top:0">Your order arrives tomorrow before 10 AM.</p>
-      <div class="field"><label for="coName">Recipient name</label><input id="coName" type="text" placeholder="Full name" value="${coData.name||""}"><span class="err">Recipient name is required.</span></div>
-      <div class="field"><label for="coPhone">Phone / WhatsApp number</label><input id="coPhone" type="tel" placeholder="08xxxxxxxxxx" value="${coData.phone||""}"><span class="err">Phone number is required (at least 9 digits).</span></div>
-      <div class="field"><label for="coAddr">Full address</label><textarea id="coAddr" rows="3" placeholder="Street, house number, landmark, city">${coData.addr||""}</textarea><span class="err">Address is required.</span></div>
-      <div class="field"><label for="coNote">Note for the courier (optional)</label><input id="coNote" type="text" placeholder="Example: leave with security" value="${coData.note||""}"></div>
+      <div class="field"><label for="coName">Recipient name</label><input id="coName" type="text" placeholder="Full name" value="${esc(coData.name||"")}"><span class="err">Recipient name is required.</span></div>
+      <div class="field"><label for="coPhone">Phone / WhatsApp number</label><input id="coPhone" type="tel" placeholder="08xxxxxxxxxx" value="${esc(coData.phone||"")}"><span class="err">Phone number is required (at least 9 digits).</span></div>
+      <div class="field"><label for="coAddr">Full address</label><textarea id="coAddr" rows="3" placeholder="Street, house number, landmark, city">${esc(coData.addr||"")}</textarea><span class="err">Address is required.</span></div>
+      <div class="field"><label for="coNote">Note for the courier (optional)</label><input id="coNote" type="text" placeholder="Example: leave with security" value="${esc(coData.note||"")}"></div>
       <div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn btn-ghost" id="coCancel">Cancel</button><button class="btn btn-green" id="coNext">Continue to payment →</button></div>`;
   } else if (coStep === 2){
     const opts = [["transfer","🏦 Bank Transfer","BCA / Mandiri / BRI — automatic verification"],["cod","💵 Cash on Delivery (COD)","Pay in cash when your order arrives"],["qris","📱 QRIS","Scan the code, confirmed instantly"]];
@@ -588,7 +608,7 @@ function renderCheckout(){
     body = `
       <h2 id="coTitle">Confirm your order</h2>
       <p style="color:var(--muted);margin-top:0">Double-check before we pass it on to the farmers.</p>
-      <div class="review-box"><b>${coData.name}</b><br>${coData.addr}<br>${coData.phone}${coData.note?`<br><i>Note: ${coData.note}</i>`:""}<br><br><b>Pay via:</b> ${{transfer:"Bank Transfer",cod:"Cash on Delivery (COD)",qris:"QRIS"}[payMethod]}</div>
+      <div class="review-box"><b>${esc(coData.name)}</b><br>${esc(coData.addr)}<br>${esc(coData.phone)}${coData.note?`<br><i>Note: ${esc(coData.note)}</i>`:""}<br><br><b>Pay via:</b> ${{transfer:"Bank Transfer",cod:"Cash on Delivery (COD)",qris:"QRIS"}[payMethod]}</div>
       <div class="review-box">${items}<div class="row"><span>Delivery</span><span>${ship===0?"FREE":fmt(ship)}</span></div><div class="row" style="font-weight:800;font-size:16px;border-top:1px dashed var(--line);padding-top:8px"><span>Total</span><span>${fmt(sub+ship)}</span></div></div>
       <div style="display:flex;gap:10px;justify-content:space-between"><button class="btn btn-ghost" id="coBack">← Back</button><button class="btn btn-accent" id="coPlace">Place order · ${fmt(sub+ship)}</button></div>`;
   } else {
@@ -605,7 +625,7 @@ function renderCheckout(){
           <div class="t">Shipped<span>Tomorrow 7 AM</span></div>
           <div class="t">Arriving<span>Tomorrow before 10 AM</span></div>
         </div>
-        <p style="font-size:13.5px;color:var(--muted)">Confirmation sent to WhatsApp ${coData.phone}. 100% freshness guarantee applies.</p>
+        <p style="font-size:13.5px;color:var(--muted)">Confirmation sent to WhatsApp ${esc(coData.phone)}. 100% freshness guarantee applies.</p>
         <button class="btn btn-green" id="coDone" style="margin-top:14px">Back to marketplace</button>
       </div>`;
   }
